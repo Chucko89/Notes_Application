@@ -1,23 +1,25 @@
 <div class="container">
-  <h1>Welcome to Sinatra!</h1>
-  <p>Hello, world!</p>
+  <h1>Welcome to the simple notepad</h1>
+  <h3>Enter a new task here!</h3>
+  <form action="/create" method="post">
+    <input type="text" placeholder="Enter a task name" name="new_title">
+    <input type="text" placeholder="Enter a description" name="new_content">
+    <input type="submit" value="Submit!">
+  </form>
+  <p>You have the folloiwing tasks to complete:</p>
 
-  <table>
-    <tr>
-      <th>File Description</th>
-      <th>File Location</th>
-    </tr>
-    <tr>
-      <td>This view file</td>
-      <td><code><%= __FILE__.gsub(Sinatra::Application.root, '') %></code></td>
-    </tr>
-    <tr>
-      <td>The layout file</td>
-      <td><code><%= File.expand_path('../layout.erb', __FILE__).gsub(Sinatra::Application.root, '') %></code></td>
-    </tr>
-    <tr>
-      <td>The current controller</td>
-      <td><code><%= File.expand_path('../../controllers/index.rb', __FILE__).gsub(Sinatra::Application.root, '') %></code></td>
-    </tr>
-  </table>
+  <% Note.find_each do |note| %>
+      Complete? - <%= note.completed %>
+      <br>
+      <%= note.title %> <%= note.content %>
+    <form action="/complete" method="post">
+      <input type="hidden" value="<%= note.id %>" name="id">
+      <input type="submit" value="complete!">
+    </form>
+    <form action="/delete" method="post">
+      <input type="hidden" value="<%= note.id %>" name="id">  
+      <input type="submit" value="delete">
+    </form>
+    <br>
+  <% end %>
 </div>
